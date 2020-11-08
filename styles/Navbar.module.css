@@ -1,0 +1,37 @@
+.navbar {
+  display: inline;
+}
+
+.normal-nav {
+  display: inline-block;
+}
+
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .normal-nav {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: inline-block;
+  }
+}
+
+.menu-icon {
+  font-size: 1.3em;
+  padding-right: .5em;
+  text-align: right;
+}
+
+.nav-list {
+  position: absolute;
+  right: 0;
+}
+
+.list-item {
+  background: rgba(0,0,0,.8);
+  text-align: right;
+}

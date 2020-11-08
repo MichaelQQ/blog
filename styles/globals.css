@@ -14,3 +14,31 @@ a {
 * {
   box-sizing: border-box;
 }
+
+body {
+  font-family: 'Gloria Hallelujah', sans-serif, '新細明體', cursive;
+  margin: 0;
+  padding: 0
+}
+
+.root {
+  max-width: 1080px;
+  margin: 0 auto
+}
+
+nav {
+  font-size: 1.5em;
+  float: right;
+}
+
+nav li {
+  display: inline-block;
+  text-decoration: none;
+  list-style: none;
+  margin: .2em .5em;
+  color: white;
+}
+
+nav li.active {
+  color: gold;
+}
