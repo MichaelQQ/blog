@@ -37,7 +37,7 @@ export async function getStaticProps() {
   // will receive `posts` as a prop at build time
   return {
     props: {
-      posts,
+      posts: posts.sort((a, b) => b.id - a.id),
     },
   };
 }
