@@ -1,17 +1,19 @@
 import Navbar from './navbar'
 import { useRouter } from "next/router";
 import Link from 'next/link'
-import Image from "next/image";
+// import Image from "next/image";
 import styles from "../styles/Header.module.css";
 
 const coverImages = {
-  "/portfolio": `/images/portfolio-cover-low.jpg`,
+  "/blog/[id]": `/images/cover-low.jpeg`,
   "/blog": `/images/cover-low.jpeg`,
   default: `/images/about-cover-low.jpg`,
 };
 
 const Header = () => {
   const router = useRouter();
+
+
   return (
     <header className={styles["header"]}>
       <img

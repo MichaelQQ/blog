@@ -1,5 +1,5 @@
 import React from "react";
-import Link from 'next/link'
+import Link from "next/link";
 import styles from "../styles/Navbar.module.css";
 
 const navLabels = [
@@ -7,10 +7,10 @@ const navLabels = [
     path: "/",
     name: "Home",
   },
-  // {
-  //   path: "/blog",
-  //   name: "Blog",
-  // },
+  {
+    path: "/blog",
+    name: "Blog",
+  },
 ];
 
 const Navbar = ({ pathName }) => {
@@ -21,22 +21,20 @@ const Navbar = ({ pathName }) => {
   return (
     <div className={styles["navbar"]}>
       <nav className={styles["normal-nav"]}>
-        {navLabels.map((label, index) =>
-          pathName.match(`^${label.path}`) ? (
-            <Link href={label.path} key={index}>
-              <li className={styles["active"]}>{label.name}</li>
-            </Link>
-          ) : (
-            <Link href={label.path} key={index}>
-              <li>{label.name}</li>
-            </Link>
-          )
-        )}
+        {navLabels.map((label, index) => (
+          <Link href={label.path} key={index}>
+            <li
+              // className={pathName.startsWith(`${label.path}`) ? "active" : ""}
+            >
+              {label.name}
+            </li>
+          </Link>
+        ))}
       </nav>
 
       <nav className={styles["mobile-nav"]}>
         <div className={styles["menu-icon"]} onClick={toggleMenu}>
-          <i className={styles["fa fa-bars"]} aria-hidden="true"></i>
+          <i className="fa fa-bars" aria-hidden="true"></i>
         </div>
 
         {toggle && (

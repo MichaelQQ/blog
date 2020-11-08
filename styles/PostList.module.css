@@ -1,0 +1,11 @@
+.post-list {
+  font-family:  'Lucida Sans Unicode', 'Lucida Grande', sans-serif, '新細明體', cursive;
+  padding: 0 4em;
+  min-height: 200px;
+}
+
+@media (max-width: 640px) {
+  .post-list {
+    padding: 0;
+  }
+}
