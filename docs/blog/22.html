@@ -1,0 +1,59 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><link rel="icon" href="/favicon.svg?v=1.3"/><link rel="icon" href="/favicon.ico?v=1.3"/><link rel="shortcut icon" href="/favicon.ico?v=1.3"/><link rel="stylesheet" href="/css/github-markdown.css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Pangolin" rel="stylesheet"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"/><meta name="description" content="&quot;先看一下#Object.create 和#Object.assign 在#MDN 的說明：\n\n&gt;The Object.create() method creates a new object with&quot;"/><meta name="og:url" content="https://MichaelQQ.com/blog/22"/><meta name="og:type" content="article"/><meta name="og:title" content="MichaelQQ.com - Object.create and Object.assign"/><meta name="og:description" content="&quot;先看一下#Object.create 和#Object.assign 在#MDN 的說明：\n\n&gt;The Object.create() method creates a new object with&quot;"/><meta name="og:image" content="https://MichaelQQ.com/favicon.ico?v=1.3"/><title>MichaelQQ.com - Object.create and Object.assign</title><link rel="preload" href="/_next/static/css/b1ceab9ce276bd45c145.css" as="style"/><link rel="stylesheet" href="/_next/static/css/b1ceab9ce276bd45c145.css" data-n-g=""/><link rel="preload" href="/_next/static/css/688b44acd51deb99a355.css" as="style"/><link rel="stylesheet" href="/_next/static/css/688b44acd51deb99a355.css" data-n-p=""/><noscript data-n-css="true"></noscript><link rel="preload" href="/_next/static/chunks/main-7eab65f534a6c4802802.js" as="script"/><link rel="preload" href="/_next/static/chunks/webpack-e067438c4cf4ef2ef178.js" as="script"/><link rel="preload" href="/_next/static/chunks/framework.cdbdac0a36200f52203c.js" as="script"/><link rel="preload" href="/_next/static/chunks/e82d01500e11e0131e78851aa17fd9f5e63d6c88.e48df4f42fa5987f981d.js" as="script"/><link rel="preload" href="/_next/static/chunks/pages/_app-056b53ea5b06b1e6662e.js" as="script"/><link rel="preload" href="/_next/static/chunks/pages/blog/%5Bid%5D-d4573fb72c47155146e1.js" as="script"/></head><body><div id="__next"><div class="root"><header class="Header_header__182Qc"><img class="Header_header-image__Ri2Dj" src="/images/cover-low.jpeg"/><div class="Header_header-content__1CVEL"><div class="Header_header-bar__2D0tD"><h1>MichaelQQ.com</h1><div class="Navbar_navbar__3KWoz"><nav class="Navbar_normal-nav__OceVw"><li>Home</li><li>Blog</li></nav><nav class="Navbar_mobile-nav__3A8iO"><div class="Navbar_menu-icon__2SjMI"><i class="fa fa-bars" aria-hidden="true"></i></div></nav></div></div></div></header><div class="PostCard_post__2sMXY"><h1>Object.create and Object.assign</h1><p>7/10/2017, 9:42:37 PM</p><div class="markdown-body"><p>先看一下#Object.create 和#Object.assign 在#MDN 的說明：</p>
+<blockquote>
+<p>The Object.create() method creates a new object with the specified prototype object and properties.</p>
+<p>Syntax: Object.create(proto[, propertiesObject])</p>
+<p>— <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create">Object.create() MDN</a></p>
+<p>The Object.assign() method is used to copy the values of all enumerable own properties from one or more source objects to a target object. It will return the target object.</p>
+<p>Syntax: Object.assign(target, …sources)</p>
+<p>— <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign() MDN</a></p>
+</blockquote>
+<p>換句話說就是</p>
+<ul>
+<li>Object.create可以用來建立有特定#prototype 的#物件</li>
+<li>Object.assign可以用來複製多個物件的屬性到目標物件</li>
+</ul>
+<pre><code class="language-js">var car = {
+  wheel: 3,
+  speed: () => console.log('fast')
+}
+
+var car1 = Object.create(car)
+var car2 = Object.create(car)
+var car3 = Object.assign({}, car)
+var car4 = Object.assign(car)
+
+car1.speed()  // fast
+car2.speed()  // fast
+car3.speed()  // fast
+car4.speed()  // fast
+console.log(car1) // {__proto__: {speed: (), wheel: 3}}
+console.log(car2) // {__proto__: {speed: (), wheel: 3}}
+console.log(car3) // {wheel: 3}
+console.log(car4) // {wheel: 3}
+
+car.wheel = 2
+car.speed = () => console.log('very fast')
+
+car1.speed()  // very fast
+car2.speed()  // very fast
+car3.speed()  // fast
+car4.speed()  // very fast
+console.log(car1) // {__proto__: {speed: (), wheel: 2}}
+console.log(car2) // {__proto__: {speed: (), wheel: 2}}
+console.log(car3) // {wheel: 3}
+console.log(car4) // {wheel: 2}
+</code></pre>
+<p>由上面的例子可以觀察</p>
+<ol>
+<li>
+<p>car1 和 car2 皆由Object.create(car)所建立，所以兩者的prototype皆為car；所以在car修改wheel和speed後，兩者皆輸出very fast。</p>
+</li>
+<li>
+<p>car3 和 car4 使用Object.assign建立，其中car3的目標物件為一個新的物件，而car4的目標物件為car；所以當car被修改時car3不受影響，反之，car4則隨car的修改而改變。</p>
+</li>
+<li>
+<p>car1和car2對比car3的差異在於，使用Object.create所建立的物件為prototype指向car，而使用Object.assign所建立的物件則是直接將car的屬性值複製到目標物件中，如範例中的空物件。</p>
+</li>
+</ol>
+<p>實際上執行上面的#code 時可能會觀察到奇怪的狀況，可以參考<a href="">A special output of Chrome console.log Object</a></p>
+</div></div><footer class="Footer_footer__317iK"><div>MichaelQQ.com © All Rights Reversed</div></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"id":"22","title":"Object.create and Object.assign","datetime":"2017-07-10T13:42:37.449Z","summary":"先看一下#Object.create 和#Object.assign 在#MDN 的說明：\n\n\u003eThe Object.create() method creates a new object with","content":"\u003cp\u003e先看一下#Object.create 和#Object.assign 在#MDN 的說明：\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eThe Object.create() method creates a new object with the specified prototype object and properties.\u003c/p\u003e\n\u003cp\u003eSyntax: Object.create(proto[, propertiesObject])\u003c/p\u003e\n\u003cp\u003e— \u003ca href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create\"\u003eObject.create() MDN\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003eThe Object.assign() method is used to copy the values of all enumerable own properties from one or more source objects to a target object. It will return the target object.\u003c/p\u003e\n\u003cp\u003eSyntax: Object.assign(target, …sources)\u003c/p\u003e\n\u003cp\u003e— \u003ca href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign\"\u003eObject.assign() MDN\u003c/a\u003e\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e換句話說就是\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eObject.create可以用來建立有特定#prototype 的#物件\u003c/li\u003e\n\u003cli\u003eObject.assign可以用來複製多個物件的屬性到目標物件\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"language-js\"\u003evar car = {\n  wheel: 3,\n  speed: () =\u003e console.log('fast')\n}\n\nvar car1 = Object.create(car)\nvar car2 = Object.create(car)\nvar car3 = Object.assign({}, car)\nvar car4 = Object.assign(car)\n\ncar1.speed()  // fast\ncar2.speed()  // fast\ncar3.speed()  // fast\ncar4.speed()  // fast\nconsole.log(car1) // {__proto__: {speed: (), wheel: 3}}\nconsole.log(car2) // {__proto__: {speed: (), wheel: 3}}\nconsole.log(car3) // {wheel: 3}\nconsole.log(car4) // {wheel: 3}\n\ncar.wheel = 2\ncar.speed = () =\u003e console.log('very fast')\n\ncar1.speed()  // very fast\ncar2.speed()  // very fast\ncar3.speed()  // fast\ncar4.speed()  // very fast\nconsole.log(car1) // {__proto__: {speed: (), wheel: 2}}\nconsole.log(car2) // {__proto__: {speed: (), wheel: 2}}\nconsole.log(car3) // {wheel: 3}\nconsole.log(car4) // {wheel: 2}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e由上面的例子可以觀察\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\n\u003cp\u003ecar1 和 car2 皆由Object.create(car)所建立，所以兩者的prototype皆為car；所以在car修改wheel和speed後，兩者皆輸出very fast。\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003ecar3 和 car4 使用Object.assign建立，其中car3的目標物件為一個新的物件，而car4的目標物件為car；所以當car被修改時car3不受影響，反之，car4則隨car的修改而改變。\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003ecar1和car2對比car3的差異在於，使用Object.create所建立的物件為prototype指向car，而使用Object.assign所建立的物件則是直接將car的屬性值複製到目標物件中，如範例中的空物件。\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003e實際上執行上面的#code 時可能會觀察到奇怪的狀況，可以參考\u003ca href=\"\"\u003eA special output of Chrome console.log Object\u003c/a\u003e\u003c/p\u003e\n"},"__N_SSG":true},"page":"/blog/[id]","query":{"id":"22"},"buildId":"aeYMXGgUxxodnH11DDTJm","nextExport":false,"isFallback":false,"gsp":true,"head":[["meta",{"charSet":"utf-8"}],["meta",{"charset":"UTF-8"}],["meta",{"name":"viewport","content":"width=device-width,initial-scale=1"}],["meta",{"name":"theme-color","content":"#000000"}],["link",{"rel":"icon","href":"/favicon.svg?v=1.3"}],["link",{"rel":"icon","href":"/favicon.ico?v=1.3"}],["link",{"rel":"shortcut icon","href":"/favicon.ico?v=1.3"}],["link",{"rel":"stylesheet","href":"/css/github-markdown.css"}],["link",{"href":"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css","rel":"stylesheet"}],["link",{"href":"https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Pangolin","rel":"stylesheet"}],["link",{"rel":"stylesheet","href":"//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"}],["meta",{"name":"description","content":"\"先看一下#Object.create 和#Object.assign 在#MDN 的說明：\\n\\n\u003eThe Object.create() method creates a new object with\""}],["meta",{"name":"og:url","content":"https://MichaelQQ.com/blog/22"}],["meta",{"name":"og:type","content":"article"}],["meta",{"name":"og:title","content":"MichaelQQ.com - Object.create and Object.assign"}],["meta",{"name":"og:description","content":"\"先看一下#Object.create 和#Object.assign 在#MDN 的說明：\\n\\n\u003eThe Object.create() method creates a new object with\""}],["meta",{"name":"og:image","content":"https://MichaelQQ.com/favicon.ico?v=1.3"}],["title",{"children":"MichaelQQ.com - Object.create and Object.assign"}]]}</script><script nomodule="" src="/_next/static/chunks/polyfills-11c8eba6a84e3fddec04.js"></script><script src="/_next/static/chunks/main-7eab65f534a6c4802802.js" async=""></script><script src="/_next/static/chunks/webpack-e067438c4cf4ef2ef178.js" async=""></script><script src="/_next/static/chunks/framework.cdbdac0a36200f52203c.js" async=""></script><script src="/_next/static/chunks/e82d01500e11e0131e78851aa17fd9f5e63d6c88.e48df4f42fa5987f981d.js" async=""></script><script src="/_next/static/chunks/pages/_app-056b53ea5b06b1e6662e.js" async=""></script><script src="/_next/static/chunks/pages/blog/%5Bid%5D-d4573fb72c47155146e1.js" async=""></script><script src="/_next/static/aeYMXGgUxxodnH11DDTJm/_buildManifest.js" async=""></script><script src="/_next/static/aeYMXGgUxxodnH11DDTJm/_ssgManifest.js" async=""></script></body></html>

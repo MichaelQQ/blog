@@ -1,0 +1,145 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><link rel="icon" href="/favicon.svg?v=1.3"/><link rel="icon" href="/favicon.ico?v=1.3"/><link rel="shortcut icon" href="/favicon.ico?v=1.3"/><link rel="stylesheet" href="/css/github-markdown.css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Pangolin" rel="stylesheet"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"/><meta name="description" content="&quot;最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。\n\n\n&gt;Fibonacci number:\n&gt;\n&gt;0, &quot;"/><meta name="og:url" content="https://MichaelQQ.com/blog/19"/><meta name="og:type" content="article"/><meta name="og:title" content="MichaelQQ.com - Fibonacci number"/><meta name="og:description" content="&quot;最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。\n\n\n&gt;Fibonacci number:\n&gt;\n&gt;0, &quot;"/><meta name="og:image" content="https://MichaelQQ.com/favicon.ico?v=1.3"/><title>MichaelQQ.com - Fibonacci number</title><link rel="preload" href="/_next/static/css/b1ceab9ce276bd45c145.css" as="style"/><link rel="stylesheet" href="/_next/static/css/b1ceab9ce276bd45c145.css" data-n-g=""/><link rel="preload" href="/_next/static/css/688b44acd51deb99a355.css" as="style"/><link rel="stylesheet" href="/_next/static/css/688b44acd51deb99a355.css" data-n-p=""/><noscript data-n-css="true"></noscript><link rel="preload" href="/_next/static/chunks/main-7eab65f534a6c4802802.js" as="script"/><link rel="preload" href="/_next/static/chunks/webpack-e067438c4cf4ef2ef178.js" as="script"/><link rel="preload" href="/_next/static/chunks/framework.cdbdac0a36200f52203c.js" as="script"/><link rel="preload" href="/_next/static/chunks/e82d01500e11e0131e78851aa17fd9f5e63d6c88.e48df4f42fa5987f981d.js" as="script"/><link rel="preload" href="/_next/static/chunks/pages/_app-056b53ea5b06b1e6662e.js" as="script"/><link rel="preload" href="/_next/static/chunks/pages/blog/%5Bid%5D-d4573fb72c47155146e1.js" as="script"/></head><body><div id="__next"><div class="root"><header class="Header_header__182Qc"><img class="Header_header-image__Ri2Dj" src="/images/cover-low.jpeg"/><div class="Header_header-content__1CVEL"><div class="Header_header-bar__2D0tD"><h1>MichaelQQ.com</h1><div class="Navbar_navbar__3KWoz"><nav class="Navbar_normal-nav__OceVw"><li>Home</li><li>Blog</li></nav><nav class="Navbar_mobile-nav__3A8iO"><div class="Navbar_menu-icon__2SjMI"><i class="fa fa-bars" aria-hidden="true"></i></div></nav></div></div></div></header><div class="PostCard_post__2sMXY"><h1>Fibonacci number</h1><p>7/10/2017, 9:20:54 PM</p><div class="markdown-body"><p>最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。</p>
+<blockquote>
+<p>Fibonacci number:</p>
+<p>0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144…</p>
+<p>Fn = Fn-1 + Fn-2</p>
+</blockquote>
+<p>一開始看到 Fibonacci number 最直覺的做法就是用#Recursive</p>
+<p>#程式 碼如下：</p>
+<pre><code class="language-javascript">const fib = n => {
+  if (n &#x3C; 2) {
+    return 1
+  }
+  return fib(n - 1) + fib(n - 2);
+}
+
+//or
+const fib = n => n &#x3C; 2 ? 1 : fib(n - 1) + fib(n - 2);
+</code></pre>
+<p>這樣的做法在數字越大就會越來越慢，因為在計算的過程中，越小的數字會被重複計算越多次</p>
+<pre><code>fib(6)
+  |---fib(5)
+  |     |---fib(4)
+  |     |     |---fib(3)
+  |     |     |     |---fib(2)
+  |     |     |     |---fib(1)
+  |     |     |---fib(2)
+  |     |---fib(3)
+  |           |---fib(2)
+  |           |---fib(1)
+  |---fib(4)
+        |---fib(3)
+        |     |---fib(2)
+        |     |---fib(1)
+        |---fib(2)
+</code></pre>
+<p>以fib(6)為例</p>
+<ul>
+<li>fib(5)算1次</li>
+<li>fib(4)算2次</li>
+<li>fib(3)算3次
+…</li>
+</ul>
+<p>所以在[1]的文中，作者的方法是讓Fibonacci function有cache機制。如果直接修改Fibonacci function的話可能會像這樣：</p>
+<pre><code class="language-javascript">let m = {};
+const fib = n => {
+  if (m[n]) {
+    return m[n];
+  }
+  if (n &#x3C; 2) {
+    return 1;
+  }
+  m[n] = fib(n-1) + fib(n-2);
+  return m[n];
+}
+</code></pre>
+<p>可是我們並不想直接將cache機制加在Fibonacci function中，而是另外建立一個function，用途是將傳入的function變成有#cache 機制。
+但這裡作者指出另一個問題</p>
+<blockquote>
+<p>因為Fibonacci function是recursive，所以要確保return時呼叫的>Fibonacci function也是有cache機制的Fibonacci function。</p>
+</blockquote>
+<p>[1]的回應部分有提到一種寫起來比較簡單的做法，但這裡，我想記錄一下用Y combinator做法的推導過程。</p>
+<blockquote>
+<p>Used in this way the Y combinator implements simple recursion. In the lambda calculus it is not possible to refer to the definition of a function in a function body. Recursion may only be achieved by passing in a function as a parameter. The Y combinator demonstrates this style of programming.</p>
+<p>— <a href="https://en.wikipedia.org/wiki/Fixed-point_combinator">Wikipedia Fixed-point combinator</a></p>
+</blockquote>
+<p>首先，我們先將Fibonacci function做一點變形。</p>
+<pre><code class="language-javascript">const afib = f => n => {
+  if (n &#x3C; 2) {
+    return 1;
+  }
+  return f(n -1) + f(n - 2);
+}
+
+//or
+const afib = f => n => n &#x3C; 2 ? 1 : f(n - 1) + f(n - 2);
+</code></pre>
+<p>現在他已經不是一個真正Fibonacci function，但還保有其外觀。接下來我們需要個function可以讓變成真正的Fibonacci function，並且在其中加入cache機制。</p>
+<p><code>const memoFib = makeMemoFib(afib);</code></p>
+<pre><code class="language-javascript">// a function to create realFib function
+const makeMemoFib = (f, m = {}) => {
+  const memoFib = (n) => {
+    if (m[n]) {
+      return m[n]
+    }
+    const fib = f(memoFib);
+    m[n] = fib(n);
+    return m[n];
+  };
+  return memoFib;
+};
+
+// simplify
+const makeMemoFib = (f, m = {}) => {
+  const memoFib = (n) => {
+    if (m[n]) {
+      return m[n]
+    }
+    m[n] = f(memoFib)(n);
+    return m[n];
+  };
+  return memoFib;
+};
+</code></pre>
+<p>我們建立一個makeMemoFib的function，讓我們傳入被變形過的Fibonacci function，並且回傳一個有cache機制的Fibonacci function (memoFib)。</p>
+<p>為了滿足“In the lambda calculus it is not possible to refer to the definition of a function in a function body”，我們將makeMemoFib簡化，不用另外宣告一個fib。</p>
+<p>但是我們還是宣告了memoFib，所以我們還是需要再進一步簡化它，而可以幫助我們簡化的是：</p>
+<p><code>memoFib = makeMemoFib(f, m);</code></p>
+<pre><code class="language-javascript">const makeMemoFib = (f, m = {}) => {
+  return (n) => {
+    if (m[n]) {
+      return m[n]
+    }
+    m[n] = f(makeMemoFib(f, m))(n);
+    return m[n];
+  };
+};
+</code></pre>
+<p>這樣已經完成大半了，我們在稍作整理一下</p>
+<pre><code class="language-javascript">const makeMemoFib = (f, m = {}) => (n) => {
+  if (m[n]) {
+    return m[n]
+  }
+  m[n] = f(makeMemoFib(f, m))(n);
+  return m[n];
+};
+
+// simplify again
+const makeMemoFib = (f, m = {}) => (n) => {
+  return m[n] ? m[n] : (m[n] = f(makeMemoFib(f, m))(n));
+};
+
+// one more
+const makeMemoFib = (f, m = {}) => (n) => m[n] ? m[n] : (m[n] = f(makeMemoFib(f, m))(n));
+</code></pre>
+<p>現在我們已經簡化到只剩makeMemoFib，雖然這樣還不算是一個合格的Y combinator，但對我們來說已經夠用，接下來只要把我們變形過的afib丟進去，就可以得到一個有cache機制的Fibonacci function了</p>
+<p><code>const memoFib = makeMemoFib(afib);</code></p>
+<p>這樣做的過程還蠻像在算#數學 的，還可以試試算階層的function，也可以用類似的方法推導出來。</p>
+<p>[2]的話則是用了ES2015的 Generator function，內容也很精彩，做法就完全不一樣了。</p>
+<p>Reference:</p>
+<ul>
+<li>[1] <a href="https://medium.com/@rayshih771012/functional-%E8%A8%88%E7%AE%97%E6%80%9D%E7%B6%AD-recursion-%E8%88%87-dp-7ed4c28e0e32#.n97xutc3h">Functional 計算思維 — Recursion 與 DP  -  Ray Shih</a></li>
+<li>[2] <a href="https://medium.com/javascript-scene/7-surprising-things-i-learned-writing-a-fibonacci-generator-4886a5c87710#.x6uig6qrq">7 Surprising Things I Learned Writing a Fibonacci Generator in JavaScript  - Eric Elliott</a></li>
+<li>[3] <a href="http://kestas.kuliukas.com/YCombinatorExplained/">The Y Combinator explained with JavaScript</a></li>
+</ul>
+</div></div><footer class="Footer_footer__317iK"><div>MichaelQQ.com © All Rights Reversed</div></footer></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"id":"19","title":"Fibonacci number","datetime":"2017-07-10T13:20:54.575Z","summary":"最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。\n\n\n\u003eFibonacci number:\n\u003e\n\u003e0, ","content":"\u003cp\u003e最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eFibonacci number:\u003c/p\u003e\n\u003cp\u003e0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144…\u003c/p\u003e\n\u003cp\u003eFn = Fn-1 + Fn-2\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e一開始看到 Fibonacci number 最直覺的做法就是用#Recursive\u003c/p\u003e\n\u003cp\u003e#程式 碼如下：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-javascript\"\u003econst fib = n =\u003e {\n  if (n \u0026#x3C; 2) {\n    return 1\n  }\n  return fib(n - 1) + fib(n - 2);\n}\n\n//or\nconst fib = n =\u003e n \u0026#x3C; 2 ? 1 : fib(n - 1) + fib(n - 2);\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e這樣的做法在數字越大就會越來越慢，因為在計算的過程中，越小的數字會被重複計算越多次\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003efib(6)\n  |---fib(5)\n  |     |---fib(4)\n  |     |     |---fib(3)\n  |     |     |     |---fib(2)\n  |     |     |     |---fib(1)\n  |     |     |---fib(2)\n  |     |---fib(3)\n  |           |---fib(2)\n  |           |---fib(1)\n  |---fib(4)\n        |---fib(3)\n        |     |---fib(2)\n        |     |---fib(1)\n        |---fib(2)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e以fib(6)為例\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003efib(5)算1次\u003c/li\u003e\n\u003cli\u003efib(4)算2次\u003c/li\u003e\n\u003cli\u003efib(3)算3次\n…\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e所以在[1]的文中，作者的方法是讓Fibonacci function有cache機制。如果直接修改Fibonacci function的話可能會像這樣：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-javascript\"\u003elet m = {};\nconst fib = n =\u003e {\n  if (m[n]) {\n    return m[n];\n  }\n  if (n \u0026#x3C; 2) {\n    return 1;\n  }\n  m[n] = fib(n-1) + fib(n-2);\n  return m[n];\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e可是我們並不想直接將cache機制加在Fibonacci function中，而是另外建立一個function，用途是將傳入的function變成有#cache 機制。\n但這裡作者指出另一個問題\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e因為Fibonacci function是recursive，所以要確保return時呼叫的\u003eFibonacci function也是有cache機制的Fibonacci function。\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e[1]的回應部分有提到一種寫起來比較簡單的做法，但這裡，我想記錄一下用Y combinator做法的推導過程。\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003eUsed in this way the Y combinator implements simple recursion. In the lambda calculus it is not possible to refer to the definition of a function in a function body. Recursion may only be achieved by passing in a function as a parameter. The Y combinator demonstrates this style of programming.\u003c/p\u003e\n\u003cp\u003e— \u003ca href=\"https://en.wikipedia.org/wiki/Fixed-point_combinator\"\u003eWikipedia Fixed-point combinator\u003c/a\u003e\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cp\u003e首先，我們先將Fibonacci function做一點變形。\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-javascript\"\u003econst afib = f =\u003e n =\u003e {\n  if (n \u0026#x3C; 2) {\n    return 1;\n  }\n  return f(n -1) + f(n - 2);\n}\n\n//or\nconst afib = f =\u003e n =\u003e n \u0026#x3C; 2 ? 1 : f(n - 1) + f(n - 2);\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e現在他已經不是一個真正Fibonacci function，但還保有其外觀。接下來我們需要個function可以讓變成真正的Fibonacci function，並且在其中加入cache機制。\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003econst memoFib = makeMemoFib(afib);\u003c/code\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-javascript\"\u003e// a function to create realFib function\nconst makeMemoFib = (f, m = {}) =\u003e {\n  const memoFib = (n) =\u003e {\n    if (m[n]) {\n      return m[n]\n    }\n    const fib = f(memoFib);\n    m[n] = fib(n);\n    return m[n];\n  };\n  return memoFib;\n};\n\n// simplify\nconst makeMemoFib = (f, m = {}) =\u003e {\n  const memoFib = (n) =\u003e {\n    if (m[n]) {\n      return m[n]\n    }\n    m[n] = f(memoFib)(n);\n    return m[n];\n  };\n  return memoFib;\n};\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e我們建立一個makeMemoFib的function，讓我們傳入被變形過的Fibonacci function，並且回傳一個有cache機制的Fibonacci function (memoFib)。\u003c/p\u003e\n\u003cp\u003e為了滿足“In the lambda calculus it is not possible to refer to the definition of a function in a function body”，我們將makeMemoFib簡化，不用另外宣告一個fib。\u003c/p\u003e\n\u003cp\u003e但是我們還是宣告了memoFib，所以我們還是需要再進一步簡化它，而可以幫助我們簡化的是：\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003ememoFib = makeMemoFib(f, m);\u003c/code\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-javascript\"\u003econst makeMemoFib = (f, m = {}) =\u003e {\n  return (n) =\u003e {\n    if (m[n]) {\n      return m[n]\n    }\n    m[n] = f(makeMemoFib(f, m))(n);\n    return m[n];\n  };\n};\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e這樣已經完成大半了，我們在稍作整理一下\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-javascript\"\u003econst makeMemoFib = (f, m = {}) =\u003e (n) =\u003e {\n  if (m[n]) {\n    return m[n]\n  }\n  m[n] = f(makeMemoFib(f, m))(n);\n  return m[n];\n};\n\n// simplify again\nconst makeMemoFib = (f, m = {}) =\u003e (n) =\u003e {\n  return m[n] ? m[n] : (m[n] = f(makeMemoFib(f, m))(n));\n};\n\n// one more\nconst makeMemoFib = (f, m = {}) =\u003e (n) =\u003e m[n] ? m[n] : (m[n] = f(makeMemoFib(f, m))(n));\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e現在我們已經簡化到只剩makeMemoFib，雖然這樣還不算是一個合格的Y combinator，但對我們來說已經夠用，接下來只要把我們變形過的afib丟進去，就可以得到一個有cache機制的Fibonacci function了\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003econst memoFib = makeMemoFib(afib);\u003c/code\u003e\u003c/p\u003e\n\u003cp\u003e這樣做的過程還蠻像在算#數學 的，還可以試試算階層的function，也可以用類似的方法推導出來。\u003c/p\u003e\n\u003cp\u003e[2]的話則是用了ES2015的 Generator function，內容也很精彩，做法就完全不一樣了。\u003c/p\u003e\n\u003cp\u003eReference:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e[1] \u003ca href=\"https://medium.com/@rayshih771012/functional-%E8%A8%88%E7%AE%97%E6%80%9D%E7%B6%AD-recursion-%E8%88%87-dp-7ed4c28e0e32#.n97xutc3h\"\u003eFunctional 計算思維 — Recursion 與 DP  -  Ray Shih\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e[2] \u003ca href=\"https://medium.com/javascript-scene/7-surprising-things-i-learned-writing-a-fibonacci-generator-4886a5c87710#.x6uig6qrq\"\u003e7 Surprising Things I Learned Writing a Fibonacci Generator in JavaScript  - Eric Elliott\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e[3] \u003ca href=\"http://kestas.kuliukas.com/YCombinatorExplained/\"\u003eThe Y Combinator explained with JavaScript\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"},"__N_SSG":true},"page":"/blog/[id]","query":{"id":"19"},"buildId":"aeYMXGgUxxodnH11DDTJm","nextExport":false,"isFallback":false,"gsp":true,"head":[["meta",{"charSet":"utf-8"}],["meta",{"charset":"UTF-8"}],["meta",{"name":"viewport","content":"width=device-width,initial-scale=1"}],["meta",{"name":"theme-color","content":"#000000"}],["link",{"rel":"icon","href":"/favicon.svg?v=1.3"}],["link",{"rel":"icon","href":"/favicon.ico?v=1.3"}],["link",{"rel":"shortcut icon","href":"/favicon.ico?v=1.3"}],["link",{"rel":"stylesheet","href":"/css/github-markdown.css"}],["link",{"href":"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css","rel":"stylesheet"}],["link",{"href":"https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Pangolin","rel":"stylesheet"}],["link",{"rel":"stylesheet","href":"//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"}],["meta",{"name":"description","content":"\"最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。\\n\\n\\n\u003eFibonacci number:\\n\u003e\\n\u003e0, \""}],["meta",{"name":"og:url","content":"https://MichaelQQ.com/blog/19"}],["meta",{"name":"og:type","content":"article"}],["meta",{"name":"og:title","content":"MichaelQQ.com - Fibonacci number"}],["meta",{"name":"og:description","content":"\"最近看的文章中，有兩篇[1][2]剛好都提到#Fibonacci_number ，其中一篇用了#DP 的做法，自己也試著推導一次，順便記錄下來。\\n\\n\\n\u003eFibonacci number:\\n\u003e\\n\u003e0, \""}],["meta",{"name":"og:image","content":"https://MichaelQQ.com/favicon.ico?v=1.3"}],["title",{"children":"MichaelQQ.com - Fibonacci number"}]]}</script><script nomodule="" src="/_next/static/chunks/polyfills-11c8eba6a84e3fddec04.js"></script><script src="/_next/static/chunks/main-7eab65f534a6c4802802.js" async=""></script><script src="/_next/static/chunks/webpack-e067438c4cf4ef2ef178.js" async=""></script><script src="/_next/static/chunks/framework.cdbdac0a36200f52203c.js" async=""></script><script src="/_next/static/chunks/e82d01500e11e0131e78851aa17fd9f5e63d6c88.e48df4f42fa5987f981d.js" async=""></script><script src="/_next/static/chunks/pages/_app-056b53ea5b06b1e6662e.js" async=""></script><script src="/_next/static/chunks/pages/blog/%5Bid%5D-d4573fb72c47155146e1.js" async=""></script><script src="/_next/static/aeYMXGgUxxodnH11DDTJm/_buildManifest.js" async=""></script><script src="/_next/static/aeYMXGgUxxodnH11DDTJm/_ssgManifest.js" async=""></script></body></html>
