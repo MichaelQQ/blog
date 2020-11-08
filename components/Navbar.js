@@ -14,7 +14,6 @@ const navLabels = [
 ];
 
 const Navbar = ({ pathName }) => {
-  console.log(pathName)
   const [toggle, setToggle] = React.useState(false);
 
   const toggleMenu = () => setToggle(!toggle);

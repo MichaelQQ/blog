@@ -14,10 +14,10 @@ const Header = () => {
   const router = useRouter();
   return (
     <header className={styles["header"]}>
-      <Image
+      <img
         className={styles["header-image"]}
-        width={1280}
-        height={853}
+        // width={1280}
+        // height={853}
         src={coverImages[router.pathname] || coverImages["default"]}
       />
       <div className={styles["header-content"]}>
