@@ -5,9 +5,9 @@ import Image from "next/image";
 import styles from "../styles/Header.module.css";
 
 const coverImages = {
-  "/portfolio": "/images/portfolio-cover-low.jpg",
-  "/blog": "/images/cover-low.jpeg",
-  default: "/images/about-cover-low.jpg",
+  "/portfolio": `${process.env.BASE_PATH}/images/portfolio-cover-low.jpg`,
+  "/blog": `${process.env.BASE_PATH}/images/cover-low.jpeg`,
+  default: `${process.env.BASE_PATH}/images/about-cover-low.jpg`,
 };
 
 const Header = () => {
