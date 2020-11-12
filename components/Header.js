@@ -24,7 +24,7 @@ const Header = () => {
       />
       <div className={styles["header-content"]}>
         <div className={styles["header-bar"]}>
-          <Link href="/" ><h1>MichaelQQ.com</h1></Link>
+          <Link href="/" ><a><h1>MichaelQQ.com</h1></a></Link>
           <Navbar pathName={router.pathname} />
         </div>
       </div>

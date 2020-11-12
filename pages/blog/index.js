@@ -22,19 +22,14 @@ export async function getStaticProps() {
     const filePath = path.join(postsDirectory, filename);
     const fileContents = fs.readFileSync(filePath, "utf8");
     const [, id, title, datetime] = /^(\d+)-(.+)\[(.+)\].md$/.exec(filename);
-    // Generally you would parse/transform the contents
-    // For example you can transform markdown to HTML here
 
     return {
       id,
       title,
       datetime,
       summary: fileContents.slice(0, 100),
-      content: fileContents,
     };
   });
-  // By returning { props: posts }, the Blog component
-  // will receive `posts` as a prop at build time
   return {
     props: {
       posts: posts.sort((a, b) => b.id - a.id),

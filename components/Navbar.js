@@ -23,11 +23,13 @@ const Navbar = ({ pathName }) => {
       <nav className={styles["normal-nav"]}>
         {navLabels.map((label, index) => (
           <Link href={label.path} key={index}>
-            <li
+            <a>
+              <li
               // className={pathName.startsWith(`${label.path}`) ? "active" : ""}
-            >
-              {label.name}
-            </li>
+              >
+                {label.name}
+              </li>
+            </a>
           </Link>
         ))}
       </nav>
