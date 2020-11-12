@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:static": "next build && next export && mv out docs && touch docs/.nojekyll",
+    "build:static": "next build && next export -o docs",
     "start": "next start"
   },
   "dependencies": {
