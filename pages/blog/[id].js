@@ -3,7 +3,9 @@ import fs from "fs";
 import path from "path";
 import remark from "remark";
 import html from "remark-html";
+import Script from "next/script";
 import styles from "../../styles/PostCard.module.css";
+import Comment from "../../components/Comment";
 
 const Post = ({ id, title, datetime, summary, content }) => {
   return (
@@ -20,6 +22,10 @@ const Post = ({ id, title, datetime, summary, content }) => {
         />
         <title>{`MichaelQQ.com - ${title}`}</title>
       </Head>
+      <Script
+        src="https://michaelqq-com.disqus.com/embed.js"
+        data-timestamp={+new Date()}
+      />
       <div className={styles["post"]}>
         <h1>{title}</h1>
         <p>{new Date(datetime).toLocaleString()}</p>
@@ -28,6 +34,7 @@ const Post = ({ id, title, datetime, summary, content }) => {
           dangerouslySetInnerHTML={{ __html: content }}
         />
       </div>
+      <Comment id={id} />
     </>
   );
 };
