@@ -20,6 +20,7 @@
   /*background: black;*/
   /*color: white;*/
   color: black;
+  cursor: pointer;
 }
 
 .post-button:hover {
