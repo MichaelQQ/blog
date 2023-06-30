@@ -4,8 +4,8 @@ import path from "path";
 import remark from "remark";
 import html from "remark-html";
 import Script from "next/script";
-import styles from "../../styles/PostCard.module.css";
-import Comment from "../../components/Comment";
+import styles from "../../styles/post-card.module.css";
+import Comment from "../../components/comments";
 
 const Post = ({ id, title, datetime, summary, content }) => {
   return (

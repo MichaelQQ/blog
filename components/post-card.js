@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "../styles/PostCard.module.css";
+import styles from "../styles/post-card.module.css";
 
 const PostCard = ({ id, title, datetime, summary }) => (
   <div className={styles["post"]}>

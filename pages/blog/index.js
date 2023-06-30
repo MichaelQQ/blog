@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import styles from "../../styles/PostList.module.css";
+import styles from "../../styles/post-list.module.css";
 
-import PostCard from "../../components/PostCard";
+import PostCard from "../../components/post-card";
 
 const PostList = ({ posts }) => {
   return (
