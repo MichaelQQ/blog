@@ -7,6 +7,7 @@ import Script from "next/script";
 import styles from "../../styles/post-card.module.css";
 import Comment from "../../components/comments";
 import HtmlToReact from "html-to-react";
+import BuyMeACoffee from "../../components/bmc";
 
 const Post = ({ id, title, datetime, summary, content }) => {
   const htmlToReactParser = new HtmlToReact.Parser();
@@ -34,6 +35,7 @@ const Post = ({ id, title, datetime, summary, content }) => {
         <p>{new Date(datetime).toLocaleString()}</p>
         <div className="markdown-body">{reactElement}</div>
       </div>
+      <BuyMeACoffee />
       <Comment id={id} />
     </>
   );
