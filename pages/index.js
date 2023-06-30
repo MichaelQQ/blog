@@ -1,5 +1,5 @@
 import SocialNetworkButton from '../components/social-network-buttons'
-import styles from "../styles/about.module.css";
+import styles from "../styles/abouts.module.css";
 
 export default function Home() {
   return (
