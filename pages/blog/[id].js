@@ -6,8 +6,11 @@ import html from "remark-html";
 import Script from "next/script";
 import styles from "../../styles/post-card.module.css";
 import Comment from "../../components/comments";
+import HtmlToReact from "html-to-react";
 
 const Post = ({ id, title, datetime, summary, content }) => {
+  const htmlToReactParser = new HtmlToReact.Parser();
+  const reactElement = htmlToReactParser.parse(content);
   return (
     <>
       <Head>
@@ -29,10 +32,7 @@ const Post = ({ id, title, datetime, summary, content }) => {
       <div className={styles["post"]}>
         <h1>{title}</h1>
         <p>{new Date(datetime).toLocaleString()}</p>
-        <div
-          className="markdown-body"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <div className="markdown-body">{reactElement}</div>
       </div>
       <Comment id={id} />
     </>
