@@ -44,9 +44,9 @@ export async function getStaticPaths() {
   const filenames = fs.readdirSync(postsDirectory);
 
   return {
-    paths: filenames.map(filename => {
-      const [, id, , ] = /^(\d+)-(.+)\[(.+)\].md$/.exec(filename);
-      return { params: { id } }
+    paths: filenames.map((filename) => {
+      const [, id, ,] = /^(\d+)-(.+)\[(.+)\].md$/.exec(filename);
+      return { params: { id } };
     }),
     fallback: false,
     // fallback: true or false // See the "fallback" section below
