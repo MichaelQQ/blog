@@ -4,7 +4,7 @@ import styles from "../styles/post-card.module.css";
 const PostCard = ({ id, title, datetime, summary }) => (
   <div className={styles["post"]}>
     <Link href={`/blog/${id}`} style={{ textDecoration: "none" }}>
-      <a><h1 style={{ color: "black" }}>{title}</h1></a>
+      <h1 style={{ color: "black" }}>{title}</h1>
     </Link>
     <p>{new Date(datetime).toLocaleString()}</p>
     <p>{summary}</p>
