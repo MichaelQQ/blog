@@ -1,8 +1,8 @@
 import Head from "next/head";
 import fs from "fs";
 import path from "path";
-import remark from "remark";
-import html from "remark-html";
+import {remark} from 'remark';
+import remarkHtml from 'remark-html'
 import Script from "next/script";
 import styles from "../../styles/post-card.module.css";
 import Comment from "../../components/comments";
@@ -67,7 +67,10 @@ export async function getStaticProps(context) {
   const [, id, title, datetime] = /^(\d+)-(.+)\[(.+)\].md$/.exec(fileName);
   // Generally you would parse/transform the contents
   // For example you can transform markdown to HTML here
-  const result = await remark().use(html).process(fileContents);
+  // 
+  //!!! It’s recommended to sanitize your HTML any time you do not completely trust authors or the plugins being used.
+  // https://github.com/rehypejs/rehype-sanitize 
+  const result = await remark().use(remarkHtml, { sanitize: false }).process(fileContents);
 
   // By returning { props: posts }, the Blog component
   // will receive `posts` as a prop at build time
