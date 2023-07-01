@@ -1,4 +1,4 @@
-###### `ruby`
+###### tags: `ruby`
 ## How to set Sidekiq log level to debug?
 
 ```ruby
