@@ -9,9 +9,13 @@ const PostList = ({ posts }) => {
   return (
     <>
       <Head>
+        <meta name="description" content="Blog | MichaelQQ.com" />
+        <meta name="og:type" content="article" />
+        <meta name="og:description" content="Blog|MichaelQQ.com" />
         <meta name="og:url" content={`https://MichaelQQ.com/blog/`} />
-        <meta name="og:title" content={`MichaelQQ.com`} />
+        <meta name="og:title" content={`Blog | MichaelQQ.com`} />
         <meta name="og:image" content="https://MichaelQQ.com/favicon.ico?v=1.3" />
+        <title>{`Blog | MichaelQQ.com`}</title>
       </Head>
       <div className={styles["post-list"]}>
         {posts.map((post, index) => (

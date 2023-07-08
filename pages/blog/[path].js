@@ -19,10 +19,10 @@ const Post = ({ id, title, datetime, summary, content, path }) => {
         <meta name="description" content={JSON.stringify(summary)} />
         <meta name="og:url" content={`https://MichaelQQ.com/blog/${encodeURI(path)}`} />
         <meta name="og:type" content="article" />
-        <meta name="og:title" content={`MichaelQQ.com - ${title}`} />
+        <meta name="og:title" content={`${title} | MichaelQQ.com`} />
         <meta name="og:description" content={JSON.stringify(summary)} />
         <meta name="og:image" content="https://MichaelQQ.com/favicon.ico?v=1.3" />
-        <title>{`MichaelQQ.com - ${title}`}</title>
+        <title>{`${title} | MichaelQQ.com`}</title>
       </Head>
       <Script
         src="https://michaelqq-com.disqus.com/embed.js"
