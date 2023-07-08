@@ -22,15 +22,13 @@ const genSitemap = () => {
     readPostFile(postsDirectory, filename)
   );
 
-  const sitemapContent = `
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!--We manually set the two URLs we know already-->
-  <url><loc>https://MichaelQQ.com</loc></url>
-  <url><loc>https://MichaelQQ.com/blog</loc></url>
-  ${posts.map(post => `<url><loc>https://MichaelQQ.com/blog/${encodeURI(post.path)}</loc></url>`).join('\n')}
-</urlset>
-  `
+    <url><loc>https://MichaelQQ.com</loc></url>
+    <url><loc>https://MichaelQQ.com/blog</loc></url>
+${posts.map(post => `    <url><loc>https://MichaelQQ.com/blog/${encodeURI(post.path)}</loc></url>`).join('\n')}
+  </urlset>`
 
   fs.writeFile(path.join(process.cwd(), "public", "sitemap.xml"), sitemapContent, (err) => {
     if (err) throw err;
