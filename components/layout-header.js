@@ -5,7 +5,7 @@ import Link from 'next/link'
 import styles from "../styles/layout-header.module.css";
 
 const coverImages = {
-  "/blog/[id]": `/images/cover-low.jpeg`,
+  "/blog/[path]": `/images/cover-low.jpeg`,
   "/blog": `/images/cover-low.jpeg`,
   default: `/images/about-cover-low.jpg`,
 };

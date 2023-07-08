@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import styles from "../../styles/post-list.module.css";
-
+import readPostFile from "../../utils/file-pattern";
 import PostCard from "../../components/post-card";
 
 const PostList = ({ posts }) => {
@@ -17,19 +17,10 @@ const PostList = ({ posts }) => {
 export async function getStaticProps() {
   const postsDirectory = path.join(process.cwd(), "posts");
   const filenames = fs.readdirSync(postsDirectory);
+  const posts = filenames.map((filename) =>
+    readPostFile(postsDirectory, filename)
+  );
 
-  const posts = filenames.map((filename) => {
-    const filePath = path.join(postsDirectory, filename);
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const [, id, title, datetime] = /^(\d+)-(.+)\[(.+)\].md$/.exec(filename);
-
-    return {
-      id,
-      title,
-      datetime,
-      summary: fileContents.slice(0, 100),
-    };
-  });
   return {
     props: {
       posts: posts.sort((a, b) => b.id - a.id),
