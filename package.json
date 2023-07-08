@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "build:sitemap": "node utils/sitemap.js",
     "build": "next build",
-    "build:static": "next build && next export -o out && touch out/.nojekyll && echo michaelqq.com > out/CNAME",
+    "build:static": "npm run build:sitemap && next build && next export -o out && touch out/.nojekyll && echo michaelqq.com > out/CNAME",
     "start": "next start"
   },
   "dependencies": {
