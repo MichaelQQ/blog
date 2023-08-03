@@ -6,7 +6,8 @@ const socialNetworkButtons = [
       color: '#2d2727',
       background: '#4e4e4e',
       borderRadius: '100%'
-    }
+    },
+    label: 'github link' 
   }, {
     link: 'https://twitter.com/MichaelTu10',
     icon: 'fa-twitter',
@@ -14,7 +15,8 @@ const socialNetworkButtons = [
       color: '#1da1f2',
       background: '#4e9cce',
       borderRadius: '100%'
-    }
+    },
+    label: 'twitter link' 
   // }, {
   //   link: 'https://medium.com/@MichaelQQ',
   //   icon: 'fa-medium',
@@ -30,7 +32,8 @@ const socialNetworkButtons = [
       color: '#0177b5',
       background: '#2787b9',
       borderRadius: '100%'
-    }
+    },
+    label: 'linkedin link' 
   }, {
     link: 'mailto:mr.tu@michaelqq.com',
     icon: 'fa-envelope',
@@ -38,12 +41,13 @@ const socialNetworkButtons = [
       color: '#2d2727',
       background: '#4e4e4e',
       borderRadius: '100%'
-    }
+    },
+    label: 'mailto link' 
   }
 ]
 
-const SocialNetworkButton = ({link, style, icon}) => (
-  <a href={link} style={{margin: '0 .25em'}}>
+const SocialNetworkButton = ({link, style, icon, label}) => (
+  <a href={link} style={{margin: '0 .25em'}} aria-label={label} >
     <span className="fa-stack fa-2x">
       <i className="fa fa-circle fa-stack-2x" style={style}></i>
       <i className={icon + " fa fa-stack-1x fa-inverse"}></i>
@@ -58,6 +62,7 @@ const SocialNetworkButtons = () => (
         link={button.link}
         style={button.style}
         icon={button.icon}
+        label={button.label}
         key={index}
       />
     )}
