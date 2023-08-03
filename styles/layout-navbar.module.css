@@ -29,6 +29,7 @@
 .nav-list {
   position: absolute;
   right: 0;
+  display: contents;
 }
 
 .list-item {

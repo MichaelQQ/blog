@@ -38,7 +38,7 @@ const Navbar = ({ pathName }) => {
         </div>
 
         {toggle && (
-          <div className={styles["nav-list"]}>
+          <ol className={styles["nav-list"]}>
             {navLabels.map((label, index) => (
               <div
                 key={index}
@@ -50,7 +50,7 @@ const Navbar = ({ pathName }) => {
                 </Link>
               </div>
             ))}
-          </div>
+          </ol>
         )}
       </nav>
     </div>
