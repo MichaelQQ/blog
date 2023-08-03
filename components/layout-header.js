@@ -1,13 +1,15 @@
 import Navbar from './layout-navbar'
 import { useRouter } from "next/router";
 import Link from 'next/link'
-// import Image from "next/image";
+import Image from "next/image";
 import styles from "../styles/layout-header.module.css";
+import cover from '../public/images/cover.jpeg'
+import aboutCover from '../public/images/about-cover.jpg'
 
 const coverImages = {
-  "/blog/[path]": `/images/cover-low.jpeg`,
-  "/blog": `/images/cover-low.jpeg`,
-  default: `/images/about-cover-low.jpg`,
+  "/blog/[path]": cover,
+  "/blog": cover,
+  default: aboutCover,
 };
 
 const Header = () => {
@@ -16,11 +18,18 @@ const Header = () => {
 
   return (
     <header className={styles["header"]}>
-      <img
-        className={styles["header-image"]}
-        // width={1280}
-        // height={853}
+      <Image
+        alt="Cover image"
+        // Importing an image will
+        // automatically set the width and height
         src={coverImages[router.pathname] || coverImages["default"]}
+        // sizes="100vw"
+        // Make the image display full width
+        style={{
+          width: '100%',
+          height: 'auto',
+          maxHeight: '700px'
+        }}
       />
       <div className={styles["header-content"]}>
         <div className={styles["header-bar"]}>
